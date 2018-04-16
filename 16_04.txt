@@ -1,0 +1,36 @@
+Premiers tests
+
+Originel { accuracy : 0.461024498886 | delta_accuracy : 0.0 }
+Sans NM_M { accuracy : 0.412026726058 | delta_accuracy : -0.0489977728285 }
+Sans RELPOS { accuracy : 0.436525612472 | delta_accuracy : -0.0244988864143 }
+Sans GR { accuracy : 0.41425389755 | delta_accuracy : -0.0467706013363 }
+Sans GR { accuracy : 0.416481069042 | delta_accuracy : -0.0445434298441 }
+Sans ILD_log10 { accuracy : 0.503340757238 | delta_accuracy : 0.0423162583519 }
+Sans DeltaPHI { accuracy : 0.443207126949 | delta_accuracy : -0.0178173719376 }
+Sans PHIND { accuracy : 0.403118040089 | delta_accuracy : -0.0579064587973 }
+Sans PE { accuracy : 0.425389755011 | delta_accuracy : -0.0356347438753 }
+
+RESULTS en regroupant en deux groupes
+For facies = [1, 1, 1, 1, 1, 2, 2, 2]
+Originel { accuracy : 0.873051224944 | delta_accuracy : 0.0 }
+Sans NM_M { accuracy : 0.837416481069 | delta_accuracy : -0.0356347438753 }
+Sans RELPOS { accuracy : 0.884187082405 | delta_accuracy : 0.011135857461 }
+Sans GR { accuracy : 0.853006681514 | delta_accuracy : -0.0200445434298 }
+Sans GR { accuracy : 0.86859688196 | delta_accuracy : -0.00445434298441 }
+Sans ILD_log10 { accuracy : 0.877505567929 | delta_accuracy : 0.00445434298441 }
+Sans DeltaPHI { accuracy : 0.890868596882 | delta_accuracy : 0.0178173719376 }
+Sans PHIND { accuracy : 0.884187082405 | delta_accuracy : 0.011135857461 }
+Sans PE { accuracy : 0.886414253898 | delta_accuracy : 0.0133630289532 }
+
+RESULTS en regroupant en trois groupes
+RESULTS
+For facies = [1, 1, 2, 2, 2, 3, 3, 3]
+Originel { accuracy : 0.683741648107 | delta_accuracy : 0.0 }
+Sans NM_M { accuracy : 0.623608017817 | delta_accuracy : -0.0601336302895 }
+Sans RELPOS { accuracy : 0.714922048998 | delta_accuracy : 0.0311804008909 }
+Sans GR { accuracy : 0.688195991091 | delta_accuracy : 0.00445434298441 }
+Sans GR { accuracy : 0.685968819599 | delta_accuracy : 0.0022271714922 }
+Sans ILD_log10 { accuracy : 0.712694877506 | delta_accuracy : 0.0289532293987 }
+Sans DeltaPHI { accuracy : 0.690423162584 | delta_accuracy : 0.00668151447661 }
+Sans PHIND { accuracy : 0.692650334076 | delta_accuracy : 0.00890868596882 }
+Sans PE { accuracy : 0.694877505568 | delta_accuracy : 0.011135857461 }
