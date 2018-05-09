@@ -1,5 +1,6 @@
 import pandas as pd
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 #from sklearn.cross_validation import train_test_split
@@ -50,7 +51,27 @@ class MachineLearn():
     self.test_well_data = self.data[self.data['Well Name'] == test_well_name]
 
     # Preparation des vecteurs d'apprentissage/de test
+    ## Discrimination
+    """
+    print(len(self.learn_data))
+    discrim = "GR"
+    self.learn_data = self.learn_data[
+        (self.learn_data[discrim] > self.learn_data[discrim].mean() - self.learn_data[discrim].std()) &
+        (self.learn_data[discrim] < self.learn_data[discrim].mean() + self.learn_data[discrim].std())
+        ]
+    print(len(self.learn_data))
+    """
+    # -> ne marche pas : baisse de performances
+
     self.learn_features_vector = self.learn_data[features]
+    ## Logarithme
+    """
+    print(self.learn_features_vector)
+    self.learn_features_vector["GR"] = self.learn_features_vector["GR"]
+    print(self.learn_features_vector)
+    """
+    # -> ne marche pas, résultats trop faibles
+    
     self.learn_facies_labels = self.learn_data["Facies"]
     self.test_well_features_vector = self.test_well_data[features]
 
@@ -159,7 +180,7 @@ if __name__ == '__main__':
 
   #TODO Factoriser
 
-  facies_group = [1,1,2,2,2,3,3,3] # Si'lon veut regrouper les facies
+  facies_group = [1,2,3,4,5,6,7,8] # Si'lon veut regrouper les facies
 
   mach = MachineLearn(
       features=['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'NM_M', 'RELPOS'],
@@ -174,10 +195,10 @@ if __name__ == '__main__':
   mach4 = MachineLearn(
       features=['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE'],
       facies_group=facies_group)
-  mach_sans_GR = MachineLearn(
-      features=['ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'RELPOS', 'NM_M'],
-      facies_group=facies_group
-  )
+  #mach_sans_GR = MachineLearn(
+  #    features=['ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'RELPOS', 'NM_M'],
+  #    facies_group=facies_group
+  #)
   mach_sans_ILD_log10 = MachineLearn(
       features=['GR', 'DeltaPHI', 'PHIND', 'PE', 'RELPOS', 'NM_M'],
       facies_group=facies_group
@@ -186,11 +207,11 @@ if __name__ == '__main__':
       features=['GR', 'ILD_log10', 'PHIND', 'PE', 'NM_M', 'RELPOS'],
       facies_group=facies_group
   )
-  mach_sans_PHIND = MachineLearn(
-      features=['GR', 'ILD_log10', 'DeltaPHI', 'PE', 'NM_M', 'RELPOS'],facies_group=facies_group
-  )
+  #mach_sans_PHIND = MachineLearn(
+  #    features=['GR', 'ILD_log10', 'DeltaPHI', 'PE', 'NM_M', 'RELPOS'],facies_group=facies_group
+  #)
   mach_sans_PE = MachineLearn(
-      features=['GR', 'ILD_log10', 'DeltaPHI', 'NM_M', 'RELPOS'],
+      features=['GR', 'ILD_log10', 'PHIND' , 'DeltaPHI', 'NM_M', 'RELPOS' ],
       facies_group=facies_group
   )
 
@@ -201,18 +222,18 @@ if __name__ == '__main__':
   results.append(["Originel", mach.test()])
   results.append(["Sans NM_M", mach2.test()])
   results.append(["Sans RELPOS", mach3.test()])
-  results.append(["Sans GR", mach4.test()])
-  results.append(["Sans GR", mach_sans_GR.test()])
+  #results.append(["Sans GR", mach4.test()])
+ #results.append(["Sans GR", mach_sans_GR.test()])
   results.append(["Sans ILD_log10", mach_sans_ILD_log10.test()])
   results.append(["Sans DeltaPHI", mach_sans_DeltaPHI.test()])
-  results.append(["Sans PHIND", mach_sans_PHIND.test()])
+  #results.append(["Sans PHIND", mach_sans_PHIND.test()])
   results.append(["Sans PE", mach_sans_PE.test()])
 
   print("RESULTS")
   print("For facies =", facies_group)
   for i in results:
-    print(i[0], "{", "accuracy :", i[1],
-          "| delta_accuracy :", i[1] - results[0][1], "}")
+    print(i[0], "{", "accuracy :", "{0:.3f}".format(i[1]),
+          "| delta_accuracy :", "{0:.3f}".format(i[1] - results[0][1]), "}")
 
 
   # Amélioration lorsque l'on retire la resistivité, peut être expliquée par la différence des fluides, par la resistivité
