@@ -7,6 +7,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import svm
 from sklearn.metrics import classification_report
 import sklearn.metrics as metrics
+import copy
+from sklearn import neighbors
+from sklearn.ensemble import AdaBoostClassifier
 
 random_state = 42  # On gare toujours la même graine pou les tests.
 
@@ -21,7 +24,7 @@ class MachineLearn():
       facies_group: list = [1,2,3,4,5,6,7,8]
       ):
     """[summary]
-    
+
     Keyword Arguments:
       test_well_name {str} -- nom du puit utilisé pour le test (default: {"SHANKLE"})
       features {list} -- paramètres utilisés pour le processus d'apprentissage (default: {['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'NM_M', 'RELPOS']})
@@ -71,7 +74,7 @@ class MachineLearn():
     print(self.learn_features_vector)
     """
     # -> ne marche pas, résultats trop faibles
-    
+
     self.learn_facies_labels = self.learn_data["Facies"]
     self.test_well_features_vector = self.test_well_data[features]
 
@@ -109,7 +112,7 @@ class MachineLearn():
            random_state=None,
            verbose_report=False):
     """Pour tester les paramètres sans tout réécrire à chaque fois
-    
+
     Keyword Arguments:
       C {int} -- Penalty parameter C of the error term. (default: {10})
       kernel {str} -- ‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’ or ‘precomputed’ (default: {'rbf'})
@@ -142,6 +145,7 @@ class MachineLearn():
     #TODO Se renseigner sur la cross validation
 
     # Paramétrage de la machine
+
     clf = svm.SVC(
         C=C,
         kernel=kernel,
@@ -156,6 +160,10 @@ class MachineLearn():
         decision_function_shape=decision_function_shape,
         random_state=random_state
     )
+    """
+    clf = svm.LinearSVC(C=10, max_iter=1000, random_state=42, class_weight="balanced")
+    """
+
     # Apprentissage
     clf.fit(x_train, y_train)
 
@@ -178,10 +186,108 @@ class MachineLearn():
 
 if __name__ == '__main__':
 
-  #TODO Factoriser
+  def combinations(target,data):
+      for i in range(len(data)):
+        new_target = copy.copy(target)
+        new_data = copy.copy(data)
+        new_target.append(data[i])
+        new_data = data[i+1:]
+        #print(new_target)
+        combft.append(new_target)
+        combinations(new_target, new_data)
 
-  facies_group = [1,1,2,2,2,3,3,3] # Si'lon veut regrouper les facies
+  #def listfacies():
 
+
+
+  target = []
+  facies_group = [1,2,3,4,5,6,7,8] # Si'lon veut regrouper les facies
+  combfacies = []
+  ft = ['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'NM_M', 'RELPOS']
+  combft = [] # Liste contenant la liste des combinaisons des éléments de ft
+  results = list()
+
+  """
+  combinations(target,ft)
+  for i in combft:
+      mach = MachineLearn(
+          features=i,
+          facies_group = facies_group
+      )
+      results.append([i, mach.test()])
+
+  print("RESULTS")
+  print("For facies =", facies_group)
+  print("--------------------")
+  for i in results:
+    if i[1] - results[6][1] >= 0:
+        print(i[0], "{", "accuracy :", "{0:.3f}".format(i[1]),
+            "| delta_accuracy :", "{0:.3f}".format(i[1] - results[6][1]), "}")
+  print("--------------------")
+  """
+
+  #We have 6 results improving the result by at least 5% :
+  #['GR', 'PHIND']
+  #['GR', 'PHIND', 'PE']
+  #['GR', 'PHIND', 'PE', 'NM_M']
+  #['GR', 'PHIND', 'PE', 'NM_M', 'RELPOS']
+  #['GR', 'PE', 'NM_M']
+  #['ILD_log10', 'PHIND', 'PE', 'NM_M']
+
+  for i1 in range(1,8+1):
+      for i2 in range(1,i1+1):
+          for i3 in range(1,i2+1):
+              for i4 in range(1,i3+1):
+                  for i5 in range(1,i4+1):
+                      for i6 in range(1,i5+1):
+                          for i7 in range(1,i6+1):
+                              for i8 in range(1,i7+1):
+                                  mylist = [i1,i2,i3,i4,i5,i6,i7,i8]
+                                  test = list(set(mylist))
+                                  test.sort()
+                                  good = True
+                                  for i in range(0, len(test)):
+                                      if (test[i]!=i+1):
+                                          good = False
+                                  if(not(i1==i2==i3==i4==i5==i6==i7==i8) and good):
+                                    mach = MachineLearn(
+                                        features=['GR', 'PHIND'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['GR', 'PHIND'],"                       ",mach.test())
+                                    mach = MachineLearn(
+                                        features=['GR', 'PHIND', 'PE'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['GR', 'PHIND', 'PE'],"                 ",mach.test())
+                                    mach = MachineLearn(
+                                        features=['GR', 'PHIND', 'PE', 'NM_M'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['GR', 'PHIND', 'PE', 'NM_M'],"         ",mach.test())
+                                    mach = MachineLearn(
+                                        features=['GR', 'PHIND', 'PE', 'NM_M', 'RELPOS'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['GR', 'PHIND', 'PE', 'NM_M', 'RELPOS'],mach.test())
+                                    mach = MachineLearn(
+                                        features=['GR', 'PE', 'NM_M'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['GR', 'PE', 'NM_M'],"                 ",mach.test())
+                                    mach = MachineLearn(
+                                        features=['ILD_log10', 'PHIND', 'PE', 'NM_M'],
+                                        facies_group = mylist
+                                    )
+                                    if mach.test()>0.95:
+                                        print(mylist,['ILD_log10', 'PHIND', 'PE', 'NM_M']," ",mach.test())
+
+  """
   mach = MachineLearn(
       features=['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'NM_M', 'RELPOS'],
       facies_group = facies_group
@@ -222,8 +328,8 @@ if __name__ == '__main__':
   results.append(["Originel", mach.test()])
   results.append(["Sans NM_M", mach2.test()])
   results.append(["Sans RELPOS", mach3.test()])
-  results.append(["Sans GR", mach4.test()])
-  results.append(["Sans GR", mach_sans_GR.test()])
+  #results.append(["Sans GR", mach4.test()])
+  #results.append(["Sans GR", mach_sans_GR.test()])
   results.append(["Sans ILD_log10", mach_sans_ILD_log10.test()])
   results.append(["Sans DeltaPHI", mach_sans_DeltaPHI.test()])
   results.append(["Sans PHIND", mach_sans_PHIND.test()])
@@ -238,3 +344,5 @@ if __name__ == '__main__':
 
   # Amélioration lorsque l'on retire la resistivité, peut être expliquée par la différence des fluides, par la resistivité
   # variable au sein d'un même facies (la résitance est très différente en fonction de la position de la mesure dans la formation géologique)
+
+  """

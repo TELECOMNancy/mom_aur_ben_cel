@@ -8,10 +8,10 @@ from sklearn import svm
 data = pd.read_csv('resources/training_dat.csv')
 
 test_well = data[data['Well Name'] == 'SHANKLE'] #Well = puit -> nom du puit, pour tester le machine learning
-data = data[data['Well Name'] != 'SHANKLE'] #Pour le machine learning 
+data = data[data['Well Name'] != 'SHANKLE'] #Pour le machine learning
 #print(data)
 
-# Extraction du vecteur features composés des colonnes 
+# Extraction du vecteur features composés des colonnes
 features = ['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE', 'NM_M', 'RELPOS']
 features_vectors = data[features]
 facies_labels = data['Facies']
@@ -19,14 +19,15 @@ facies_labels = data['Facies']
 
 
 # Affichage d'un crossplots
-"""
+
 sns.pairplot(features_vectors[['GR', 'ILD_log10', 'DeltaPHI', 'PHIND', 'PE']])
 plt.show()
-"""
 
 # Faire devenir les echantillons gaussiens (moyenne nulle, variance 1)
+"""
 scaler = StandardScaler().fit(features_vectors)
 scaled_feature = scaler.transform(features_vectors)
+"""
 
 # Préparer la cross-validation
 x_train, x_cv, y_train, y_cv =  train_test_split(scaled_feature, facies_labels, test_size=0.05, random_state=10)
@@ -53,12 +54,3 @@ from sklearn.metrics import classification_report
 
 target_names = ['SS', 'CSiS', 'FSiS', 'SiSh', 'MS', 'WS', 'D', 'PS', 'BS']
 print(classification_report(y_test, y_pred, target_names=target_names))
-
-
-
-
-
-
-
-
-
