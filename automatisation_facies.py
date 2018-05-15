@@ -207,6 +207,8 @@ if __name__ == '__main__':
   combft = [] # Liste contenant la liste des combinaisons des éléments de ft
   results = list()
 
+  minimum = 0.95
+
   #We have 6 results improving the result by at least 5% :
   #['GR', 'PHIND']
   #['GR', 'PHIND', 'PE']
@@ -235,35 +237,35 @@ if __name__ == '__main__':
                                         features=['GR', 'PHIND'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['GR', 'PHIND'],"                       ",mach.test())
                                     mach = MachineLearn(
                                         features=['GR', 'PHIND', 'PE'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['GR', 'PHIND', 'PE'],"                 ",mach.test())
                                     mach = MachineLearn(
                                         features=['GR', 'PHIND', 'PE', 'NM_M'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['GR', 'PHIND', 'PE', 'NM_M'],"         ",mach.test())
                                     mach = MachineLearn(
                                         features=['GR', 'PHIND', 'PE', 'NM_M', 'RELPOS'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['GR', 'PHIND', 'PE', 'NM_M', 'RELPOS'],mach.test())
                                     mach = MachineLearn(
                                         features=['GR', 'PE', 'NM_M'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['GR', 'PE', 'NM_M'],"                 ",mach.test())
                                     mach = MachineLearn(
                                         features=['ILD_log10', 'PHIND', 'PE', 'NM_M'],
                                         facies_group = mylist
                                     )
-                                    if mach.test()>0.95:
+                                    if mach.test()>minimum:
                                         print(mylist,['ILD_log10', 'PHIND', 'PE', 'NM_M']," ",mach.test())
