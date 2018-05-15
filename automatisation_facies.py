@@ -199,6 +199,7 @@ if __name__ == '__main__':
   #def listfacies():
 
 
+
   target = []
   facies_group = [1,2,3,4,5,6,7,8] # Si'lon veut regrouper les facies
   combfacies = []
